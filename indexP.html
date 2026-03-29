@@ -2,52 +2,145 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Panier E-commerce</title>
 
   <style>
-    body {
-      font-family: Arial;
-      background: #f5f5f5;
-      padding: 20px;
-      text-align: center;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    h1 {
-      margin-bottom: 20px;
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 30px 20px;
+    }
+
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    }
+
+    .header p {
+      font-size: 1.1em;
+      opacity: 0.9;
     }
 
     .container {
-      display: flex;
-      justify-content: space-around;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
     }
 
     .box {
       background: white;
-      padding: 20px;
-      border-radius: 10px;
-      width: 300px;
-      margin: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+      backdrop-filter: blur(10px);
+    }
+
+    .box h2 {
+      font-size: 1.8em;
+      margin-bottom: 20px;
+      color: #667eea;
+      border-bottom: 3px solid #667eea;
+      padding-bottom: 10px;
     }
 
     .product {
+      background: #f8f9ff;
+      padding: 15px;
+      border-radius: 10px;
+      margin: 12px 0;
       display: flex;
       justify-content: space-between;
-      margin: 10px 0;
+      align-items: center;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .product:hover {
+      background: #f0f2ff;
+      border-color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+    }
+
+    .product-info {
+      flex: 1;
+    }
+
+    .product-name {
+      font-weight: 600;
+      color: #333;
+      font-size: 1.05em;
+    }
+
+    .product-price {
+      color: #667eea;
+      font-weight: 700;
+      font-size: 1.2em;
+      margin-top: 5px;
+    }
+
+    .product-buttons {
+      display: flex;
+      gap: 8px;
     }
 
     button {
-      padding: 5px 10px;
+      padding: 8px 16px;
       border: none;
-      background: #6c63ff;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
       cursor: pointer;
-      border-radius: 5px;
+      border-radius: 8px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      font-size: 0.95em;
     }
 
     button:hover {
-      background: #5548d9;
+      transform: translate(0, -2px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    button:active {
+      transform: translate(0, 0);
+    }
+
+    .btn-remove {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      padding: 8px 12px;
+      font-size: 0.9em;
+    }
+
+    .btn-quantity {
+      background: #667eea;
+      padding: 5px 10px;
+      font-size: 0.85em;
+      min-width: 35px;
+    }
+
+    .btn-clear {
+      background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+      width: 100%;
+      margin-top: 15px;
+      padding: 12px;
+      font-size: 1em;
     }
 
     ul {
@@ -56,54 +149,189 @@
     }
 
     li {
+      background: #f8f9ff;
+      padding: 15px;
+      border-radius: 8px;
+      margin: 12px 0;
       display: flex;
       justify-content: space-between;
-      margin: 5px 0;
+      align-items: center;
+      transition: all 0.3s ease;
+      border-left: 4px solid #667eea;
     }
 
-    .remove {
-      background: red;
+    li:hover {
+      background: #f0f2ff;
+      transform: translateX(5px);
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.2);
+    }
+
+    .cart-item-info {
+      flex: 1;
+    }
+
+    .cart-item-name {
+      font-weight: 600;
+      color: #333;
+      font-size: 1.05em;
+    }
+
+    .cart-item-details {
+      font-size: 0.9em;
+      color: #666;
+      margin-top: 5px;
+    }
+
+    .cart-item-total {
+      font-weight: 700;
+      color: #667eea;
+      font-size: 1.15em;
+      margin: 0 15px;
+    }
+
+    .empty-cart {
+      text-align: center;
+      padding: 40px 20px;
+      color: #999;
+    }
+
+    .empty-cart p {
+      font-size: 1.1em;
+      margin-bottom: 15px;
+    }
+
+    .total-section {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      text-align: right;
+    }
+
+    .total-section h3 {
+      font-size: 1.3em;
+      margin-bottom: 10px;
+    }
+
+    .total-amount {
+      font-size: 2em;
+      font-weight: 700;
+    }
+
+    .cart-count {
+      display: inline-block;
+      background: #f5576c;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.85em;
+      margin-left: 10px;
+    }
+
+    .quantity-control {
+      display: flex;
+      gap: 5px;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+
+      .header h1 {
+        font-size: 2em;
+      }
+
+      .box {
+        padding: 20px;
+      }
     }
   </style>
 </head>
 
 <body>
 
-  <h1>🛒 Simulateur de panier</h1>
+  <div class="header">
+    <h1>🛒 Panier E-commerce</h1>
+    <p>Gérez vos achats en toute simplicité</p>
+  </div>
 
   <div class="container">
 
     <!-- Produits -->
     <div class="box">
-      <h2>Produits</h2>
+      <h2>📦 Produits Disponibles</h2>
 
       <div class="product">
-        <span>Chaussures - 120 DT</span>
-        <button onclick="addToCart('Chaussures', 120)">Ajouter</button>
+        <div class="product-info">
+          <div class="product-name">👟 Chaussures</div>
+          <div class="product-price">120 DT</div>
+        </div>
+        <div class="product-buttons">
+          <button onclick="addToCart('Chaussures', 120)">Ajouter</button>
+        </div>
       </div>
 
       <div class="product">
-        <span>Sac - 80 DT</span>
-        <button onclick="addToCart('Sac', 80)">Ajouter</button>
+        <div class="product-info">
+          <div class="product-name">👜 Sac</div>
+          <div class="product-price">80 DT</div>
+        </div>
+        <div class="product-buttons">
+          <button onclick="addToCart('Sac', 80)">Ajouter</button>
+        </div>
       </div>
 
       <div class="product">
-        <span>Montre - 150 DT</span>
-        <button onclick="addToCart('Montre', 150)">Ajouter</button>
+        <div class="product-info">
+          <div class="product-name">⌚ Montre</div>
+          <div class="product-price">150 DT</div>
+        </div>
+        <div class="product-buttons">
+          <button onclick="addToCart('Montre', 150)">Ajouter</button>
+        </div>
+      </div>
+
+      <div class="product">
+        <div class="product-info">
+          <div class="product-name">💍 Collier</div>
+          <div class="product-price">200 DT</div>
+        </div>
+        <div class="product-buttons">
+          <button onclick="addToCart('Collier', 200)">Ajouter</button>
+        </div>
+      </div>
+
+      <div class="product">
+        <div class="product-info">
+          <div class="product-name">🕶️ Lunettes</div>
+          <div class="product-price">95 DT</div>
+        </div>
+        <div class="product-buttons">
+          <button onclick="addToCart('Lunettes', 95)">Ajouter</button>
+        </div>
       </div>
 
     </div>
 
     <!-- Panier -->
     <div class="box">
-      <h2>Panier</h2>
+      <h2>🛍️ Mon Panier <span class="cart-count" id="cartCount">0</span></h2>
       <ul id="cartItems"></ul>
-      <h3>Total: <span id="total">0</span> DT</h3>
+      <div id="emptyMessage" class="empty-cart">
+        <p>🎁 Votre panier est vide</p>
+        <p style="font-size: 0.9em;">Commencez vos achats en ajoutant des produits</p>
+      </div>
+      <div class="total-section">
+        <h3>Total à payer</h3>
+        <div class="total-amount"><span id="total">0</span> DT</div>
+      </div>
+      <button class="btn-clear" onclick="clearCart()">🗑️ Vider le panier</button>
     </div>
 
   </div>
-
-  <script>
     let cart = [];
 
     function addToCart(name, price) {
