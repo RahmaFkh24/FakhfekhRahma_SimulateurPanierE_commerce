@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Panier E-commerce</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: #f5f5f5;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+
+    .box {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      width: 300px;
+      margin: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .product {
+      display: flex;
+      justify-content: space-between;
+      margin: 10px 0;
+    }
+
+    button {
+      padding: 5px 10px;
+      border: none;
+      background: #6c63ff;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background: #5548d9;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      margin: 5px 0;
+    }
+
+    .remove {
+      background: red;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>🛒 Simulateur de panier</h1>
+
+  <div class="container">
+
+    <!-- Produits -->
+    <div class="box">
+      <h2>Produits</h2>
+
+      <div class="product">
+        <span>Chaussures - 120 DT</span>
+        <button onclick="addToCart('Chaussures', 120)">Ajouter</button>
+      </div>
+
+      <div class="product">
+        <span>Sac - 80 DT</span>
+        <button onclick="addToCart('Sac', 80)">Ajouter</button>
+      </div>
+
+      <div class="product">
+        <span>Montre - 150 DT</span>
+        <button onclick="addToCart('Montre', 150)">Ajouter</button>
+      </div>
+
+    </div>
+
+    <!-- Panier -->
+    <div class="box">
+      <h2>Panier</h2>
+      <ul id="cartItems"></ul>
+      <h3>Total: <span id="total">0</span> DT</h3>
+    </div>
+
+  </div>
+
+  <script>
+    let cart = [];
+
+    function addToCart(name, price) {
+      cart.push({ name, price });
+      updateCart();
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCart();
+    }
+
+    function updateCart() {
+      const cartItems = document.getElementById("cartItems");
+      const totalEl = document.getElementById("total");
+
+      cartItems.innerHTML = "";
+
+      let total = 0;
+
+      cart.forEach((item, index) => {
+        total += item.price;
+
+        const li = document.createElement("li");
+        li.innerHTML = `
+          ${item.name} - ${item.price} DT
+          <button class="remove" onclick="removeFromCart(${index})">X</button>
+        `;
+
+        cartItems.appendChild(li);
+      });
+
+      totalEl.textContent = total;
+    }
+  </script>
+
+</body>
+</html>
